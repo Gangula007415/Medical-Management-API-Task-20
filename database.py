@@ -5,13 +5,19 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 load_dotenv()
 
-# Look for DATABASE_URL environment variable, fallback to local MySQL Workbench
+# Read DATABASE_URL from .env locally (MySQL Workbench), or fallback to SQLite on Render
 DATABASE_URL = os.getenv(
     "DATABASE_URL", 
-    "mysql+pymysql://root:Prathap%40007@localhost:3307/medical_db"
+    "sqlite:///./medical.db"
 )
 
-engine = create_engine(DATABASE_URL)
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        DATABASE_URL, connect_args={"check_same_thread": False}
+    )
+else:
+    engine = create_engine(DATABASE_URL)
+
 
 
 SessionLocal = sessionmaker(
