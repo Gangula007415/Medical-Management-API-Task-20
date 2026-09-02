@@ -5,13 +5,14 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 load_dotenv()
 
-# It will look for an environment variable named DATABASE_URL first
+# Look for DATABASE_URL environment variable, fallback to local MySQL Workbench
 DATABASE_URL = os.getenv(
     "DATABASE_URL", 
     "mysql+pymysql://root:Prathap%40007@localhost:3307/medical_db"
 )
 
 engine = create_engine(DATABASE_URL)
+
 
 SessionLocal = sessionmaker(
     autocommit=False,
