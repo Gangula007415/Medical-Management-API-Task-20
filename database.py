@@ -1,18 +1,17 @@
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+load_dotenv()
 
-if not DATABASE_URL:
-    # Default fallback to SQLite if no DATABASE_URL environment variable is set on Render
-    DATABASE_URL = "sqlite:///./medical.db"
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-else:
-    # Handle PostgreSQL URL format if using PostgreSQL on Render
-    if DATABASE_URL.startswith("postgres://"):
-        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
-    engine = create_engine(DATABASE_URL)
+# It will look for an environment variable named DATABASE_URL first
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "mysql+pymysql://root:Prathap%40007@localhost:3307/medical_db"
+)
+
+engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(
     autocommit=False,
